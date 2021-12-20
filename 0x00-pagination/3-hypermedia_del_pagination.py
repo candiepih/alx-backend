@@ -42,8 +42,10 @@ class Server:
         """Get hypermedia index for a dataset
 
         Args:
-            index (int, optional): Index of dataset to start from. Defaults to None.
-            page_size (int, optional): Size of dataset to return. Defaults to 10.
+            index (int, optional): Index of dataset to start from.
+            Defaults to None.
+            page_size (int, optional): Size of dataset to return.
+            Defaults to 10.
 
         Returns:
             Dict: Hypermedia index
