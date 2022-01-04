@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-""" 4-main """
-MRUCache = __import__('4-mru_cache').MRUCache
+""" 100-main """
+LFUCache = __import__('100-lfu_cache').LFUCache
 
-my_cache = MRUCache()
+my_cache = LFUCache()
 my_cache.put("A", "Hello")
 my_cache.put("B", "World")
 my_cache.put("C", "Holberton")
@@ -24,7 +24,17 @@ my_cache.put("H", "H")
 my_cache.print_cache()
 my_cache.put("I", "I")
 my_cache.print_cache()
+print(my_cache.get("I"))
+print(my_cache.get("H"))
+print(my_cache.get("I"))
+print(my_cache.get("H"))
+print(my_cache.get("I"))
+print(my_cache.get("H"))
 my_cache.put("J", "J")
 my_cache.print_cache()
 my_cache.put("K", "K")
+my_cache.print_cache()
+my_cache.put("L", "L")
+my_cache.print_cache()
+my_cache.put("M", "M")
 my_cache.print_cache()
