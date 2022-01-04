@@ -61,7 +61,9 @@ def get_user():
         dict: The user.
     """
     login_as = request.args.get('login_as')
-    return users.get(int(login_as), None)
+    if login_as and login_as.isdigit():
+        return users.get(int(login_as), None)
+    return None
 
 
 @app.before_request
