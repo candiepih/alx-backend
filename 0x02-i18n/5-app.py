@@ -54,17 +54,14 @@ def index() -> str:
     return render_template('5-index.html')
 
 
-def get_user(login_as: int = None) -> dict:
+def get_user() -> dict:
     """
     This function is used to get the user.
-
-    Args:
-        login_as (int): The id of the user.
-
     Returns:
         dict: The user.
     """
-    return users.get(login_as, None)
+    login_as = request.args.get('login_as')
+    return users.get(int(login_as), None)
 
 
 @app.before_request
@@ -75,8 +72,7 @@ def before_request() -> None:
     Returns:
         None
     """
-    user = get_user(int(request.args.get('login_as')))
-    g.user = user
+    g.user = get_user()
 
 
 if __name__ == '__main__':
