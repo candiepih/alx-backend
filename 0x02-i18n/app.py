@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, g
 from flask_babel import Babel
 import locale
 from pytz import timezone
+from typing import Union
 import pytz
 
 app = Flask(__name__)
@@ -98,17 +99,17 @@ def index() -> str:
     return render_template('index.html')
 
 
-def get_user(login_as: int = None) -> dict:
+def get_user() -> Union[dict, None]:
     """
     This function is used to get the user.
-
-    Args:
-        login_as (int): The id of the user.
 
     Returns:
         dict: The user.
     """
-    return users.get(login_as, None)
+    login_as = request.args.get('login_as')
+    if login_as and login_as.isdigit():
+        return users.get(int(login_as), None)
+    return None
 
 
 @app.before_request
@@ -119,8 +120,7 @@ def before_request() -> None:
     Returns:
         None
     """
-    user = get_user(int(request.args.get('login_as')))
-    g.user = user
+    g.user = get_user()
     time_now = pytz.utc.localize(datetime.utcnow())
     time = time_now.astimezone(timezone(get_timezone()))
     locale.setlocale(locale.LC_TIME, (get_locale(), 'UTF-8'))
