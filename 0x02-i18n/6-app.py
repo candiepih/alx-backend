@@ -4,6 +4,7 @@ This is the main file of the flask application.
 """
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
+from typing import Union
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -61,17 +62,17 @@ def index() -> str:
     return render_template('6-index.html')
 
 
-def get_user(login_as: int = None) -> dict:
+def get_user() -> Union[dict, None]:
     """
     This function is used to get the user.
-
-    Args:
-        login_as (int): The id of the user.
 
     Returns:
         dict: The user.
     """
-    return users.get(login_as, None)
+    login_as = request.args.get('login_as')
+    if login_as and login_as.isdigit():
+        return users.get(int(login_as), None)
+    return None
 
 
 @app.before_request
@@ -82,8 +83,7 @@ def before_request() -> None:
     Returns:
         None
     """
-    user = get_user(int(request.args.get('login_as')))
-    g.user = user
+    g.user = get_user()
 
 
 if __name__ == '__main__':
