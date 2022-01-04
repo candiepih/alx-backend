@@ -4,6 +4,7 @@ This is the main file of the flask application.
 """
 from flask import Flask, render_template, request, g
 from flask_babel import Babel
+from typing import Union
 
 app = Flask(__name__)
 babel = Babel(app)
@@ -54,7 +55,7 @@ def index() -> str:
     return render_template('5-index.html')
 
 
-def get_user():
+def get_user() -> Union[dict, None]:
     """
     This function is used to get the user.
     Returns:
