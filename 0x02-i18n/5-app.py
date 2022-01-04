@@ -54,7 +54,7 @@ def index() -> str:
     return render_template('5-index.html')
 
 
-def get_user() -> dict:
+def get_user():
     """
     This function is used to get the user.
     Returns:
