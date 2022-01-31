@@ -8,9 +8,9 @@ const sendNotification = (phoneNumber, message, job, done) => {
 
   if (blacklist.includes(phoneNumber)) {
     done(new Error(`Phone number ${phoneNumber} is blacklisted`));
-  } else if (progress === 50) {
-    console.log(`Sending notification to ${phoneNumber}, with message: ${message}`);
   }
+  if (progress >= 50) done();
+  console.log(`Sending notification to ${phoneNumber}, with message: ${message}`);
 };
 
 queue.process('push_notification_code_2', 2, (job, done) => {

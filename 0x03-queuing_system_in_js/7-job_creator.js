@@ -1,5 +1,5 @@
 import {
-  createQueue
+  createQueue,
 } from 'kue';
 
 const jobs = [
