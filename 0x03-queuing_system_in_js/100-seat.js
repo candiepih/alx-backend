@@ -32,7 +32,7 @@ const getCurrentAvailableSeats = async () => {
 };
 
 reserveSeat(50);
-const reservationEnabled = true;
+let reservationEnabled = true;
 
 // Kue queue
 const queue = createQueue();
