@@ -61,7 +61,7 @@ jobs.forEach((job) => {
   });
 
   jb.on('failed', (err) => {
-    console.log(`Notification job ${jb.id} failed: ERROR: ${err}`);
+    console.log(`Notification job ${jb.id} failed: ${err}`);
   });
 
   jb.on('progress', (progress) => {
