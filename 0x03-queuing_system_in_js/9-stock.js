@@ -76,20 +76,19 @@ app.get('/list_products', (req, res) => {
   res.send(resList);
 });
 
-app.get('/list_products/:itemId', (req, res) => {
+app.get('/list_products/:itemId', async (req, res) => {
   const itemId = req.params.itemId;
   const item = getItemById(parseInt(itemId));
   if (item) {
-    getCurrentReservedStockById(itemId).then(stock => {
-      const resItem = {
-        itemId: item.Id,
-        itemName: item.name,
-        price: item.price,
-        initialAvailableQuantity: item.stock,
-        currentQuantity: stock !== null ? parseInt(stock) : item.stock,
-      };
-      res.send(resItem);
-    });
+    const stock = await getCurrentReservedStockById(itemId);
+    const resItem = {
+      itemId: item.Id,
+      itemName: item.name,
+      price: item.price,
+      initialAvailableQuantity: item.stock,
+      currentQuantity: stock !== null ? parseInt(stock) : item.stock,
+    };
+    res.send(resItem);
   } else {
     res.status(404).send({
       "status": "Product not found"
@@ -97,7 +96,7 @@ app.get('/list_products/:itemId', (req, res) => {
   }
 });
 
-app.get('/reserve_product/:itemId', (req, res) => {
+app.get('/reserve_product/:itemId', async (req, res) => {
   const itemId = req.params.itemId;
   const item = getItemById(parseInt(itemId));
   if (!item) {
@@ -105,29 +104,28 @@ app.get('/reserve_product/:itemId', (req, res) => {
       "status": "Product not found"
     });
   } else {
-    getCurrentReservedStockById(itemId).then(stock => {
-      if (stock !== null) {
-        stock = parseInt(stock);
-        if (stock > 0) {
-          reserveStockById(itemId, stock);
-          res.status(200).send({
-            "status": "Reservation confirmed",
-            "itemId": itemId,
-          });
-        } else {
-          res.status(404).send({
-            "status": "Not enough stock available",
-            "itemId": itemId
-          });
-        }
-      } else {
-        reserveStockById(itemId, item.stock);
+    const stock = await getCurrentReservedStockById(itemId);
+    if (stock !== null) {
+      stock = parseInt(stock);
+      if (stock > 0) {
+        reserveStockById(itemId, stock);
         res.status(200).send({
           "status": "Reservation confirmed",
           "itemId": itemId,
         });
+      } else {
+        res.status(404).send({
+          "status": "Not enough stock available",
+          "itemId": itemId
+        });
       }
-    });
+    } else {
+      reserveStockById(itemId, item.stock);
+      res.status(200).send({
+        "status": "Reservation confirmed",
+        "itemId": itemId,
+      });
+    }
   }
 });
 
